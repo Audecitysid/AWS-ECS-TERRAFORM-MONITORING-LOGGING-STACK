@@ -1,0 +1,65 @@
+[
+  {
+    "name": "es-node",
+    "image": "${docker_image_url_es}",
+    "memory": 1024,
+    "cpu": 1024,
+    "essential": true,
+    "portMappings": [
+      {
+        "hostPort": 9200,
+        "containerPort": 9200,
+        "protocol": "tcp"
+      },
+      {
+        "hostPort": 9300,
+        "containerPort": 9300,
+        "protocol": "tcp"
+      }
+    ],
+    "environment": [
+      {
+        "name": "ES_JAVA_OPTS",
+        "value": "-Xms512m -Xmx512m"
+      },
+      {
+        "name": "REGION",
+        "value": "${region}"
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "esdata",
+        "containerPath": "/usr/share/elasticsearch/data/",
+        "readOnly": false
+      },
+      {
+        "sourceVolume": "esconfig",
+        "containerPath": "/usr/share/elasticsearch/config/elasticsearch.yml",
+        "readOnly": false
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "ec2-ecs-es",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "ec2-es-log-stream"
+      }
+    },
+    "healthCheck": {
+      "command": ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"],
+      "interval": 30,
+      "timeout": 5,
+      "retries": 3,
+      "startPeriod": 60
+    },
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 65536,
+        "hardLimit": 65536
+      }
+    ]
+  }
+]

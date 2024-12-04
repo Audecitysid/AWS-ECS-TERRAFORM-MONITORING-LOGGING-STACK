@@ -1,0 +1,27 @@
+cluster.name: "elasticsearch"
+#node.name:
+cluster.initial_master_nodes: aws-es-devops-dev-app-a, aws-es-devops-dev-app-b, aws-es-devops-dev-app-c
+bootstrap.memory_lock: true
+network.host: 0.0.0.0
+transport.port: 9300
+http.port: 9200
+cloud.node.auto_attributes: true
+cluster.routing.allocation.awareness.attributes: aws_availability_zone
+discovery.seed_providers: ec2
+network.publish_host: _ec2_
+transport.publish_host: _ec2_
+discovery.ec2.endpoint: ec2.us-east-1.amazonaws.com
+discovery.ec2.availability_zones: us-east-1a,us-east-1b,us-east-1c
+discovery.ec2.tag.Elastic: "node"
+s3.client.default.endpoint: s3.us-east-1.amazonaws.com
+
+#https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
+
+
+
+
+
+
+
+
+
